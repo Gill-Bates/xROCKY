@@ -11,7 +11,6 @@ A lightweight VPN solution with DNS blocking capabilities based on **Xray-core**
 
 > *xray* + *blocky* = `xROCKY`
 
-
 ## ✨ Features
 - 🛡️ VPN with Xray-core: *Secure, private, and ultra-fast.*
 - 🔐 Invisible to Detect: *Using Xray + VLESS + Reality + xtls-rprx-vision*
@@ -25,6 +24,31 @@ A lightweight VPN solution with DNS blocking capabilities based on **Xray-core**
 - [**Blocky**](https://github.com/0xERR0R/blocky): A flexible DNS blocker for improved DNS security and filtering.
 
 By leveraging the minimal **Alpine Linux** as the base image, xROCKY ensures that you get a **small, fast, and secure** image for deployment.
+
+## Technical Background
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Client
+    participant Reality_Server
+    participant Vision_XTLS_rprx_vision
+
+    Client ->> Reality_Server: 🔒 TCP+TLS Handshake (SNI: cloudflare.com)
+    Reality_Server -->> Client: ✅ TLS 1.3 Session Established
+    Client ->> Reality_Server: 🔑 VLESS Header (UUID + Public Key)
+    activate Reality_Server
+    Reality_Server ->> Reality_Server: Verify UUID + Public Key, derive ShortID
+    deactivate Reality_Server
+    Reality_Server -->> Client: 🆗 Reality Response (ShortID)
+    Client ->> Vision_XTLS_rprx_vision: 📦 Application Data (TLS-in-TLS, HTTP/2, etc.)
+    activate Vision_XTLS_rprx_vision
+    Vision_XTLS_rprx_vision ->> Reality_Server: 🔄 Passthrough Traffic
+    Reality_Server ->> Internet: 🌍 Forward to Target
+    Internet ->> Reality_Server: Response Data
+    Vision_XTLS_rprx_vision -->> Client: 📦 Decrypted/Processed Data
+    deactivate Vision_XTLS_rprx_vision
+```
 
 ## 🛠️ Installation
 
