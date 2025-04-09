@@ -383,7 +383,7 @@ while true; do
         ;;
     6)
         clear_screen
-        echo -e "${GREEN}xROCKY Manager exited. Have a nice day!\n${NC}"
+        echo -e "${GREEN}xROCKY Manager exited. Don't forget to restart your Docker Container after Configuration changes. Have a nice day!\n${NC}"
         exit 0
         ;;
     *)
