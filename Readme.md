@@ -81,7 +81,7 @@ This project includes:
 
 ## ⚙️ **xROCKY Manager**
 
-> ⚠️ **Warning**: The setup is delivered with a default user and default secret. You must change this with the Manager before starting!
+> ⚠️ **Warning**: You need to start the `xrocky-manager` the first time after installation to generate the Keys and to setup a new user!
 
 You call up the user manager from your Docker host as follows:
 

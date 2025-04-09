@@ -16,7 +16,6 @@ RUN apk add --no-cache \
     tar \
     jq \
     nano \
-    util-linux \
     supervisor \
     libcap
 
