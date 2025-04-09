@@ -25,7 +25,7 @@ A lightweight VPN solution with DNS blocking capabilities based on **Xray-core**
 
 By leveraging the minimal **Alpine Linux** as the base image, xROCKY ensures that you get a **small, fast, and secure** image for deployment.
 
-## Technical Background
+## 📜 Technical Background
 
 ```mermaid
 sequenceDiagram
