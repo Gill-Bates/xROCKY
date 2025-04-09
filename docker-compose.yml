@@ -1,0 +1,21 @@
+services:
+  xray-blocky:
+    build: .
+    container_name: xrocky-vpn
+    image: giiibates/xrocky:latest
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - TZ=UTC
+    volumes:
+      - ./logs:/var/log
+      - ./config:/app
+    ports:
+      - 443:443/tcp
+    dns:
+      - 127.0.0.1
+      - ::1
+    cap_add:
+      - NET_BIND_SERVICE
+    network_mode: "bridge"
