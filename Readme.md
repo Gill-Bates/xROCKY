@@ -18,7 +18,7 @@ A lightweight VPN solution with DNS blocking capabilities based on **Xray-core**
 - 🪶 **Lightweight**: Built on Alpine Linux for minimal size and resource consumption.
 - ⚙️ **xROCKY Manager**: A handy shell script to manage your users and configurations.
 
-## 🎯 **Overview**
+# 🎯 **Overview**
 `xROCKY` combines the power of:
 - [**Xray**](https://github.com/XTLS/Xray-core): A revolutionary VPN technology built to bypass firewalls and protect privacy.
 - [**Blocky**](https://github.com/0xERR0R/blocky): A flexible DNS blocker for improved DNS security and filtering.
@@ -50,6 +50,10 @@ sequenceDiagram
     deactivate Vision_XTLS_rprx_vision
 ```
 
+## 🏗️ **Requirements**
+- **Docker**: Ensure `docker` and `docker compose` is installed on your system.
+- **Ports Open**: Port `443` (TCP) for the VPN must be available. You can choose a different port, but this is not recommenend.
+  
 ## 🛠️ Installation
 
 1. Clone this repository
@@ -61,12 +65,6 @@ sequenceDiagram
    ```bash
    docker compose up -
    ```
-
-## 🏗️ **Requirements**
-- **Docker**: Ensure `docker` and `docker compose` is installed on your system.
-- **Ports Open**: Port `443` (TCP) for the VPN must be available. You can choose a different port, but this is not recommenend.
-
----
 
 ## 📦 **Image Contents**
 This project includes:
@@ -92,6 +90,23 @@ You call up the user manager from your Docker host as follows:
 > 
 ![xrocky-manager](./images/manager.gif)
 
+## ⚙️ **FAQ**
+
+<details>
+  <summary>Coming soon ...</summary>
+  
+  <!-- Hier kannst du den erweiterten Inhalt einfügen.  
+  Dieser Text ist zuerst verborgen und wird angezeigt, wenn du auf **Mehr anzeigen** klickst.
+  
+  Du kannst sogar **Markdown** innerhalb des Abschnitts verwenden.
+
+  - Punkt 1
+  - Punkt 2
+
+  **Fettgedruckter Text** -->
+</details>
+
 
 ## 👨‍💻 Maintainer
-`giiibates` (aka GiIIBates)
+Gill-Bates - 2025
+**Questions? Comments?** Open an issue or send me an email: xrocky@stronzi.org

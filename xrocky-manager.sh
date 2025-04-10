@@ -1,5 +1,11 @@
 #!/bin/bash
-# Version 1.2
+
+# Version 1.1
+# - Changing the Way how to generate shortId
+# - Optimizing Shell Output to make it more clearer
+
+# Version 1.0
+# - Initial Release
 
 CONFIG_FILE="/app/xray.json"
 TMP_FILE="/tmp/xray_config_tmp.json"
@@ -11,29 +17,25 @@ YELLOW='\033[1;33m'
 BLUE='\033[1;36m'
 NC='\033[0m' # No Color
 
-# Clear screen function
+#region Functions
+
 clear_screen() {
+    # More compatible way to clear the screen than "clear"
     printf "\033c"
 }
 
-# Generate random shortId in a1b2c3d4 format
 generate_short_id() {
-    local chars=({a..z})
-    local digits=({0..9})
+    local hex_chars=({0..9} {a..f})
 
-    # Randomly select 4 letters and 4 digits
-    local id=""
-    for i in {1..4}; do
-        # Random letter
-        id+=${chars[$((RANDOM % 26))]}
-        # Random digit
-        id+=${digits[$((RANDOM % 10))]}
+    # Generate random shortId (Hexdezimal, max. 16 digits)
+    local hex_id=""
+    for _ in {1..16}; do
+        hex_id+=${hex_chars[$((RANDOM % 16))]}
     done
 
-    echo "$id"
+    echo "$hex_id"
 }
 
-# Functions
 generate_uuid() {
     if command -v xray &>/dev/null; then
         xray uuid 2>/dev/null || uuidgen | tr '[:upper:]' '[:lower:]'
@@ -149,17 +151,17 @@ check_empty_keys() {
 }
 
 get_public_ip() {
-    echo -e "${YELLOW}Detecting server IP addresses...${NC}"
+    echo -e "${YELLOW}Detecting server IP addresses! Please wait ...${NC}"
 
     # IPv4
     local ipv4=$(curl -4 -s --max-time 3 https://ipinfo.io/ip 2>/dev/null ||
         curl -4 -s --max-time 3 https://ifconfig.me/ip 2>/dev/null ||
-        echo "unknown")
+        echo "n/a")
 
     # IPv6
     local ipv6=$(curl -6 -s --max-time 3 https://ipinfo.io/ip 2>/dev/null ||
         curl -6 -s --max-time 3 https://ifconfig.me/ip 2>/dev/null ||
-        echo "unknown")
+        echo "n/a -> is your Docker setup configured for IPv6?")
 
     # Return both addresses
     echo -e "${GREEN}IPv4:${NC} ${BLUE}$ipv4${NC}"
@@ -316,6 +318,7 @@ edit_client() {
         return 1
     fi
 }
+#endregion
 
 # Main execution
 clear_screen
@@ -351,7 +354,7 @@ while true; do
     echo -e "${YELLOW}/_/\_\_| \_\___/ \___|_|\_\\__, |"
     echo -e " ${YELLOW}                          |___/ "
     echo -e "     xRocky User Manager         "
-    echo -e "      v1.2 by GillBates\n           "
+    echo -e "      v1.1 by GillBates\n           "
     echo -e "${YELLOW}1.${NC} Add user"
     echo -e "${YELLOW}2.${NC} Delete user"
     echo -e "${YELLOW}3.${NC} Edit user"
