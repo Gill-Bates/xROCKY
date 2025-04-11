@@ -11,6 +11,13 @@ A lightweight VPN solution with DNS blocking capabilities based on **Xray-core**
 
 > *xray* + *blocky* = `xROCKY`
 
+## ☕ Why yet another VPN solution?
+There are many well established VPN projects. Be it Wireguard, OpenVPN, IPsec or ocServ. Why xray (the technical basis of xROCKY) now?
+
+All of the VPN solutions mentioned have the limitation that they rely on port sharing. Wireguard, for example, relies entirely on UDP. Anyone who travels to many hotspots will have noticed that often only HTTP/S (80/443) is enabled.
+
+**The motivation behind this project is to provide a VPN service that works entirely over HTTPS (443/tcp).** There is also strong traffic obfuscation to avoid censorship (which is probably less of a problem in western countries). But it is better to have than to need. 🙂
+
 ## ✨ Features
 - 🛡️ VPN with Xray-core: *Secure, private, and ultra-fast.*
 - 🔐 Invisible to Detect: *Using Xray + VLESS + Reality + xtls-rprx-vision*

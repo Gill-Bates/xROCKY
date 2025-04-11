@@ -1,6 +1,5 @@
 services:
   xray-blocky:
-    build: .
     container_name: xrocky-vpn
     image: giiibates/xrocky:latest
     restart: always
