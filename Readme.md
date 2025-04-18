@@ -12,7 +12,7 @@ A lightweight VPN solution with DNS blocking capabilities based on **Xray-core**
 > *xray* + *blocky* = `xROCKY`
 
 ## ☕ Why yet another VPN solution?
-There are many well established VPN projects. Be it Wireguard, OpenVPN, IPsec or ocServ. Why xray (the technical basis of xROCKY) now?
+There are many well established VPN projects. Be it Wireguard, OpenVPN, IPsec, etc ... - Why xray (the technical basis of xROCKY) now?
 
 All of the VPN solutions mentioned have the limitation that they rely on port sharing. Wireguard, for example, relies entirely on UDP. Anyone who travels to many hotspots will have noticed that often only HTTP/S (80/443) is enabled.
 
@@ -70,7 +70,7 @@ sequenceDiagram
    ```
 2. Build the Docker Container:
    ```bash
-   docker compose up -
+   docker compose up -d
    ```
 
 ## 📦 **Image Contents**
@@ -100,17 +100,15 @@ You call up the user manager from your Docker host as follows:
 ## ⚙️ **FAQ**
 
 <details>
-  <summary>Coming soon ...</summary>
-  
-  <!-- Hier kannst du den erweiterten Inhalt einfügen.  
-  Dieser Text ist zuerst verborgen und wird angezeigt, wenn du auf **Mehr anzeigen** klickst.
-  
-  Du kannst sogar **Markdown** innerhalb des Abschnitts verwenden.
+  <summary><span style="font-size: 1.2em;"><strong>Can I run xROCKY behind a Reverse Proxy like ngix or Caddy?</strong></summary>
 
-  - Punkt 1
-  - Punkt 2
+Short answer: **No!** `xtls-rprx-vision` uses handshake mechanisms that a reverse proxy cannot handle. It works with other protocols in the xray family (anything websocket based). But it simply does not work with xtls-rprx-vision.
+</details>
 
-  **Fettgedruckter Text** -->
+<details>
+  <summary><span style="font-size: 1.2em;"><strong>Can I use a different Port than 443?</strong></summary>
+
+Of course. Nothing prevents you from using a TCP port other than 443. But keep in mind that this is exactly the desired goal of this project: to provide VPN over the HTTPs port.
 </details>
 
 
