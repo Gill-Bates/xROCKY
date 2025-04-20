@@ -1,7 +1,8 @@
 services:
   xray-blocky:
     container_name: xrocky-vpn
-    image: giiibates/xrocky:latest
+    #image: giiibates/xrocky:latest
+    build: .
     restart: always
     security_opt:
       - no-new-privileges:true

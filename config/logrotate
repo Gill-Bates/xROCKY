@@ -1,0 +1,9 @@
+/var/log/blocky.out.log /var/log/blocky.err.log /var/log/xray.out.log /var/log/xray.err.log {
+    daily
+    rotate 7
+    compress
+    delaycompress
+    missingok
+    notifempty
+    copytruncate
+}

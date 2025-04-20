@@ -1,12 +1,5 @@
 #!/bin/bash
 
-# Version 1.1
-# - Changing the Way how to generate shortId
-# - Optimizing Shell Output to make it more clearer
-
-# Version 1.0
-# - Initial Release
-
 CONFIG_FILE="/app/xray.json"
 TMP_FILE="/tmp/xray_config_tmp.json"
 
@@ -359,7 +352,7 @@ while true; do
     echo -e "${YELLOW}2.${NC} Delete user"
     echo -e "${YELLOW}3.${NC} Edit user"
     echo -e "${YELLOW}4.${NC} List users"
-    echo -e "${YELLOW}5.${NC} Show client config"
+    echo -e "${YELLOW}5.${NC} Show Server config"
     echo -e "${YELLOW}6.${NC} Exit"
     read -p "Choose an option (1-6): " choice
 
