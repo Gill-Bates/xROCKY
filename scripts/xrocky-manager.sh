@@ -1,5 +1,7 @@
 #!/bin/bash
 
+VERSION="1.3"
+
 CONFIG_FILE="/app/xray.json"
 TMP_FILE="/tmp/xray_config_tmp.json"
 
@@ -232,6 +234,19 @@ add_client() {
         echo -e "UUID: ${BLUE}$id${NC}"
         echo -e "Email: ${BLUE}$email${NC}"
         echo -e "Flow: ${BLUE}$flow${NC}"
+
+        # Get server config for QR code
+        local ipv4=$(curl -4 -s --max-time 3 https://ipinfo.io/ip 2>/dev/null || echo "n/a")
+        local port=$(jq -r '.inbounds[0].port' "$CONFIG_FILE")
+        local public_key=$(jq -r '.inbounds[0].streamSettings.realitySettings.publicKey' "$CONFIG_FILE")
+        local short_id=$(jq -r '.inbounds[0].streamSettings.realitySettings.shortIds[0]' "$CONFIG_FILE")
+        local dest=$(jq -r '.inbounds[0].streamSettings.realitySettings.dest' "$CONFIG_FILE")
+
+        # Generate and show QR code
+        local vless_link="vless://$id@$ipv4:$port?type=tcp&security=reality&flow=$flow&pbk=$public_key&sid=$short_id&sni=$dest#${email//@/%40}"
+        echo -e "\n${YELLOW}QR Code for new user:${NC}"
+        echo "$vless_link" | qrencode -t ANSIUTF8
+        echo -e "${GREEN}Config Link:${NC} ${BLUE}$vless_link${NC}"
     else
         echo -e "\n${RED}Error: Failed to add user!${NC}"
         return 1
@@ -280,8 +295,67 @@ list_clients() {
         return 1
     fi
 
-    echo -e "${YELLOW}Current users:${NC}"
-    jq -r '.inbounds[0].settings.clients[] | "UUID: \(.id) | Flow: \(.flow) | Email: \(.email)"' "$CONFIG_FILE" 2>/dev/null
+    local clients_data
+    clients_data=$(jq -c '.inbounds[0].settings.clients[]' "$CONFIG_FILE" 2>/dev/null)
+
+    if [ -z "$clients_data" ]; then
+        echo -e "${RED}No users found!${NC}"
+        return 1
+    fi
+
+    # Build menu
+    local client_array=()
+    local count=0
+
+    echo -e "${YELLOW}Available Clients:${NC}"
+    printf "%-4s %-36s %-20s\n" "No." "UUID (short)" "Email"
+    echo "---------------------------------------------------------------"
+
+    while IFS= read -r client; do
+        count=$((count + 1))
+        local id email
+        id=$(jq -r '.id' <<<"$client")
+        email=$(jq -r '.email' <<<"$client")
+
+        printf "%-4s %-36s %-20s\n" "$count." "${id:0:8}..." "$email"
+        client_array+=("$client")
+    done <<<"$clients_data"
+
+    echo -e "\nEnter the client number to view connection details, or press Enter to cancel:"
+    read -rp "> " selection
+
+    if [[ ! "$selection" =~ ^[0-9]+$ ]] || [ "$selection" -lt 1 ] || [ "$selection" -gt "${#client_array[@]}" ]; then
+        echo -e "${BLUE}Cancelled or invalid selection.${NC}"
+        return
+    fi
+
+    # Get selected client
+    local selected="${client_array[selection - 1]}"
+    local id=$(jq -r '.id' <<<"$selected")
+    local email=$(jq -r '.email' <<<"$selected")
+    local flow=$(jq -r '.flow // "xtls-rprx-vision"' <<<"$selected")
+
+    # Shared info
+    local ipv4=$(curl -4 -s --max-time 3 https://ipinfo.io/ip 2>/dev/null || echo "n/a")
+    local port=$(jq -r '.inbounds[0].port' "$CONFIG_FILE")
+    local public_key=$(jq -r '.inbounds[0].streamSettings.realitySettings.publicKey' "$CONFIG_FILE")
+    local short_id=$(jq -r '.inbounds[0].streamSettings.realitySettings.shortIds[0]' "$CONFIG_FILE")
+    local dest=$(jq -r '.inbounds[0].streamSettings.realitySettings.dest' "$CONFIG_FILE")
+
+    local vless_link="vless://$id@$ipv4:$port?type=tcp&security=reality&flow=$flow&pbk=$public_key&sid=$short_id&sni=$dest#${email//@/%40}"
+
+    echo -e "\n${GREEN}Client:${NC} $email"
+    echo -e "${GREEN}UUID:${NC} $id"
+    echo -e "${GREEN}Flow:${NC} $flow"
+    echo -e "${GREEN}Server IP:${NC} $ipv4"
+    echo -e "${GREEN}Port:${NC} $port"
+    echo -e "${GREEN}Dest/SNI:${NC} $dest"
+    echo -e "${GREEN}Public Key:${NC} $public_key"
+    echo -e "${GREEN}Short ID:${NC} $short_id"
+
+    echo -e "\n${YELLOW}QR Code:${NC}"
+    echo "$vless_link" | qrencode -t ANSIUTF8
+    echo -e "${GREEN}Config Link:${NC} ${BLUE}$vless_link${NC}"
 }
 
 edit_client() {
@@ -309,6 +383,21 @@ edit_client() {
     else
         echo -e "\n${RED}Error: Failed to update user!${NC}"
         return 1
+    fi
+}
+
+restart_xray() {
+    echo -e "${YELLOW}Restarting Xray service...${NC}"
+
+    if pgrep -x xray >/dev/null; then
+        if pkill -x xray; then
+            echo -e "${GREEN}Xray service restarted successfully.${NC}"
+        else
+            echo -e "${RED}Failed to restart Xray service!${NC}"
+            return 1
+        fi
+    else
+        echo -e "${BLUE}Xray is not running. No need to restart.${NC}"
     fi
 }
 #endregion
@@ -347,14 +436,16 @@ while true; do
     echo -e "${YELLOW}/_/\_\_| \_\___/ \___|_|\_\\__, |"
     echo -e " ${YELLOW}                          |___/ "
     echo -e "     xRocky User Manager         "
-    echo -e "      v1.1 by GillBates\n           "
+    echo -e "      v$VERSION by GillBates           "
+    echo -e "https://github.com/Gill-Bates/xROCKY\n"
     echo -e "${YELLOW}1.${NC} Add user"
     echo -e "${YELLOW}2.${NC} Delete user"
     echo -e "${YELLOW}3.${NC} Edit user"
-    echo -e "${YELLOW}4.${NC} List users"
+    echo -e "${YELLOW}4.${NC} List users (with QR codes)"
     echo -e "${YELLOW}5.${NC} Show Server config"
-    echo -e "${YELLOW}6.${NC} Exit"
-    read -p "Choose an option (1-6): " choice
+    echo -e "${YELLOW}6.${NC} Restart Xray service"
+    echo -e "${YELLOW}7.${NC} Exit"
+    read -p "Choose an option (1-7): " choice
 
     case $choice in
     1)
@@ -378,6 +469,10 @@ while true; do
         read -p "Press [Enter] to continue..."
         ;;
     6)
+        restart_xray
+        read -p "Press [Enter] to continue..."
+        ;;
+    7)
         clear_screen
         echo -e "${GREEN}xROCKY Manager exited. Don't forget to restart your Docker Container after Configuration changes. Have a nice day!\n${NC}"
         exit 0

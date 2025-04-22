@@ -3,11 +3,11 @@
 # 🚀 xROCKY - A lightweight VPN with DNS Blocker 🛡️
 
 ![Docker](https://img.shields.io/badge/Docker-✓-blue?logo=docker)
-![Alpine](https://img.shields.io/badge/Alpine_Linux-✓-brightgreen?logo=alpine-linux)
+![Debian](https://img.shields.io/badge/Debian_Bookworm-✓-red?logo=debian)
 ![Xray](https://img.shields.io/badge/Xray_Core-✓-success)
 ![Blocky](https://img.shields.io/badge/Blocky_DNS-✓-important)
 
-A lightweight VPN solution with DNS blocking capabilities based on **Xray-core** and **Blocky**, running on Alpine Linux. 🏔️
+A lightweight VPN solution with DNS blocking capabilities based on **Xray-core** and **Blocky**, running on Debian Linux. 🏔️
 
 > *xray* + *blocky* = `xROCKY`
 
@@ -22,7 +22,7 @@ All of the VPN solutions mentioned have the limitation that they rely on port sh
 - 🛡️ VPN with Xray-core: *Secure, private, and ultra-fast.*
 - 🔐 Invisible to Detect: *Using Xray + VLESS + Reality + xtls-rprx-vision*
 - 🚫 DNS blocking with Blocky: *Prevents tracking, ads, and malicious DNS queries.*
-- 🪶 **Lightweight**: Built on Alpine Linux for minimal size and resource consumption.
+- 🪶 **Lightweight**: Built on Debian Linux for minimal size and resource consumption.
 - ⚙️ **xROCKY Manager**: A handy shell script to manage your users and configurations.
 
 # 🎯 **Overview**
@@ -30,7 +30,7 @@ All of the VPN solutions mentioned have the limitation that they rely on port sh
 - [**Xray**](https://github.com/XTLS/Xray-core): A revolutionary VPN technology built to bypass firewalls and protect privacy.
 - [**Blocky**](https://github.com/0xERR0R/blocky): A flexible DNS blocker for improved DNS security and filtering.
 
-By leveraging the minimal **Alpine Linux** as the base image, xROCKY ensures that you get a **small, fast, and secure** image for deployment.
+By leveraging the minimal **Debian Linux** as the base image, xROCKY ensures that you get a **small, fast, and secure** image for deployment.
 
 ## 📜 Technical Background
 
