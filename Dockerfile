@@ -6,20 +6,21 @@ LABEL description="xROCKY - A lightweight VPN with DNS blocker based on Xray and
 # Install system packages
 RUN apk add --no-cache \
     bash \
-    curl \
-    unzip \
     ca-certificates \
-    iproute2 \
-    net-tools \
-    logrotate \
     cronie \
+    curl \
+    dos2unix \
+    iproute2 \
     iputils \
-    tzdata \
-    tar \
     jq \
+    libcap \
+    logrotate \
     nano \
+    net-tools \
     supervisor \
-    libcap
+    tar \
+    tzdata \
+    unzip
 
 # Install Blocky (latest release)
 RUN VERSION=$(curl -s https://api.github.com/repos/0xERR0R/blocky/releases/latest | grep tag_name | cut -d '"' -f 4) \
@@ -40,6 +41,10 @@ RUN mkdir -p /var/spool/cron/crontabs \
     && chmod 600 /etc/crontabs/root \
     && printf "0 0 * * * /usr/sbin/logrotate /etc/logrotate.conf\n" > /etc/crontabs/root
 
+# Install QRencode
+COPY ./tools/qrencode /usr/local/bin/qrencode
+RUN chmod +x /usr/local/bin/qrencode
+
 # Create working directory
 WORKDIR /app
 
@@ -55,6 +60,7 @@ COPY ./scripts/entrypoint.sh /usr/local/bin/xrocky-entrypoint
 # Allow Blocky and Xray to bind to privileged ports
 RUN setcap 'cap_net_bind_service=+ep' /usr/local/bin/xray \
     && setcap 'cap_net_bind_service=+ep' /usr/local/bin/blocky \
+    && dos2unix /usr/local/bin/xrocky-manager /usr/local/bin/xrocky-entrypoint \
     && chmod +x /usr/local/bin/xrocky-entrypoint /usr/local/bin/xrocky-manager
 
 # Expose needed ports

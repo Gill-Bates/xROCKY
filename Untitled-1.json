@@ -1,0 +1,1 @@
+echo 'vless: //YXV0bzphM2MwZGUwMy01Y2FiLTQyMjUtODczZi0wM2E2YmY0OTYxYzZANS40NS4xMDUuMTExOjQ0Mw?remarks=tobias@steiner.rs%F0%9F%87%A9%F0%9F%87%AA&path=/&obfs=none&tls=1&peer=cloudflare.com&tfo=1&xtls=2&pbk=9Ez4C4r7ziJIPR2xgx_0X6C6RH4jQ7hRqoW19IlKq0g&sid=58f09436525203d8' | qrencode -t ANSIUTF8

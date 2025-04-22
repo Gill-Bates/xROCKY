@@ -282,54 +282,8 @@ list_clients() {
         return 1
     fi
 
-    # Get server IP (try IPv4 first)
-    local ipv4=$(curl -4 -s --max-time 3 https://ipinfo.io/ip 2>/dev/null || echo "SERVER_IP")
-    
-    # Get server config details
-    local protocol=$(jq -r '.inbounds[0].protocol' "$CONFIG_FILE")
-    local port=$(jq -r '.inbounds[0].port' "$CONFIG_FILE")
-    local public_key=$(jq -r '.inbounds[0].streamSettings.realitySettings.publicKey' "$CONFIG_FILE")
-    local short_id=$(jq -r '.inbounds[0].streamSettings.realitySettings.shortIds[0]' "$CONFIG_FILE")
-    local dest=$(jq -r '.inbounds[0].streamSettings.realitySettings.dest' "$CONFIG_FILE")
-
     echo -e "${YELLOW}Current users:${NC}"
-    
-    # Get client data as array
-    local clients=()
-    while IFS= read -r line; do
-        clients+=("$line")
-    done < <(jq -c '.inbounds[0].settings.clients[]' "$CONFIG_FILE")
-
-    if [ ${#clients[@]} -eq 0 ]; then
-        echo -e "${RED}No users found!${NC}"
-        return 1
-    fi
-
-    # Display each client with option to show QR code
-    for i in "${!clients[@]}"; do
-        local client=${clients[$i]}
-        local id=$(jq -r '.id' <<< "$client")
-        local email=$(jq -r '.email' <<< "$client")
-        local flow=$(jq -r '.flow // "xtls-rprx-vision"' <<< "$client")
-
-        echo -e "\n${GREEN}$((i+1)). UUID: ${BLUE}$id${NC}"
-        echo -e "   ${GREEN}Email: ${BLUE}$email${NC}"
-        echo -e "   ${GREEN}Flow: ${BLUE}$flow${NC}"
-
-        read -p "   Show QR code for this user? (y/N): " choice
-        if [[ "$choice" =~ ^[Yy]$ ]]; then
-            # Generate VLESS link
-            local vless_link="vless://${id}@${ipv4}:${port}?type=tcp&security=reality&flow=${flow}&pbk=${public_key}&sid=${short_id}&sni=${dest}#${email//@/%40}"
-            
-            echo -e "\n${YELLOW}QR Code for ${BLUE}$email${YELLOW}:${NC}"
-            if command -v qrencode &>/dev/null; then
-                echo "$vless_link" | qrencode -t ANSIUTF8
-            else
-                echo -e "${RED}qrencode is not installed. Displaying config link instead.${NC}"
-            fi
-            echo -e "${GREEN}Config Link:${NC} ${BLUE}$vless_link${NC}"
-        fi
-    done
+    jq -r '.inbounds[0].settings.clients[] | "UUID: \(.id) | Flow: \(.flow) | Email: \(.email)"' "$CONFIG_FILE" 2>/dev/null
 }
 
 edit_client() {
