@@ -8,8 +8,8 @@ LABEL org.opencontainers.image.source="https://github.com/giiibates/xROCKY"
 LABEL org.opencontainers.image.licenses="MIT"
 
 # Gepinnte Versionen für Reproduzierbarkeit
-ARG BLOCKY_VERSION=v0.24
-ARG XRAY_VERSION=v25.1.1
+ARG BLOCKY_VERSION=v0.28.2
+ARG XRAY_VERSION=v26.1.23
 
 # Install system packages (minimiert für Produktion)
 # Hinweis: nano, net-tools, procps, iputils-ping für Debug entfernt
