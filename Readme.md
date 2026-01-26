@@ -113,5 +113,5 @@ Of course. Nothing prevents you from using a TCP port other than 443. But keep i
 
 
 ## 👨‍💻 Maintainer
-Gill-Bates - 2025
+Gill-Bates - 2025-2026
 **Questions? Comments?** Open an issue or send me an email: xrocky@stronzi.org
