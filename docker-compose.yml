@@ -1,7 +1,7 @@
 services:
   xray-blocky:
     container_name: xrocky-vpn
-    image: giiibates/xrocky:latest
+    image: docker.cirrio.de/xrocky:latest
     #build: .
     restart: always
     security_opt:
@@ -9,8 +9,7 @@ services:
     environment:
       - TZ=UTC
     volumes:
-      - ./logs:/var/log
-      - ./config:/app
+      - ./app/config:/app
     ports:
       - 443:443/tcp
     dns:
